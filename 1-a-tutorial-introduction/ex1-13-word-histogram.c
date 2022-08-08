@@ -3,6 +3,7 @@
 typedef struct Histogram {
   int digit_count[10];
   int whitespace_count;
+  int alphabet_count[26];
   int other_count;
 } Histogram;
 
@@ -24,6 +25,8 @@ void Histogram_count(Histogram *hist) {
   while((c = getchar()) != EOF) {
     if(c == ' ') {
       hist->whitespace_count += 1;
+    } else if(c >= 'a' && c <= 'z') {
+      hist->alphabet_count[c-'a'] += 1;
     } else if(c >= '0' && c <= '9') {
       hist->digit_count[c-'0'] += 1;
     } else {
@@ -35,7 +38,7 @@ void Histogram_count(Histogram *hist) {
 void Histogram_printBar(int length) {
     printf("|");
     for(int i = 0; i < length; i++) {
-      printf("==");
+      printf("-");
     } 
     printf(">\n");
 }
@@ -50,6 +53,11 @@ void Histogram_print(Histogram *hist) {
     Histogram_printBar(hist->digit_count[i]);
   }
  
+  for(int j = 0; j < 26; j++) {
+    printf("%10c", 97 + j);
+    Histogram_printBar(hist->alphabet_count[j]);
+  }
+
   printf("%10s", "Space");
   Histogram_printBar(hist->whitespace_count);
 
